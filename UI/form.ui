@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
+    <width>1800</width>
     <height>1100</height>
    </rect>
   </property>
@@ -159,12 +159,27 @@
      </property>
      <item>
       <property name="text">
+       <string>默认</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>蓝色</string>
       </property>
      </item>
      <item>
       <property name="text">
+       <string>青色</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>红色</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>品红</string>
       </property>
      </item>
      <item>
@@ -236,6 +251,9 @@
       <property name="text">
        <string>显示表名</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_show_data_v">
       <property name="geometry">
@@ -248,6 +266,9 @@
       </property>
       <property name="text">
        <string>显示数据</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_drawing">
@@ -263,6 +284,32 @@
        <string>绘制</string>
       </property>
      </widget>
+     <widget class="QRadioButton" name="radioButton_bar">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>143</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>柱型图</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_cake">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>70</y>
+        <width>143</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>饼图</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QListWidget" name="listWidget_entries">
      <property name="geometry">
@@ -275,13 +322,52 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="pushButton_save_img">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>1030</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>保存图像</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_eps">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>980</y>
+      <width>101</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>矢量图</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_png">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>980</y>
+      <width>143</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PNG</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_plot_show">
    <property name="geometry">
     <rect>
      <x>330</x>
      <y>10</y>
-     <width>1261</width>
+     <width>1451</width>
      <height>811</height>
     </rect>
    </property>
@@ -293,7 +379,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>1241</width>
+      <width>1431</width>
       <height>781</height>
      </rect>
     </property>
@@ -309,7 +395,7 @@
        <rect>
         <x>0</x>
         <y>10</y>
-        <width>1231</width>
+        <width>1421</width>
         <height>721</height>
        </rect>
       </property>
@@ -320,6 +406,31 @@
      <attribute name="title">
       <string>表格预览</string>
      </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1431</width>
+        <height>741</height>
+       </rect>
+      </property>
+      <row>
+       <property name="text">
+        <string>test1</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>test1</string>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>test</string>
+       </property>
+      </item>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -328,7 +439,7 @@
     <rect>
      <x>330</x>
      <y>830</y>
-     <width>1261</width>
+     <width>1451</width>
      <height>261</height>
     </rect>
    </property>
@@ -340,7 +451,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>1241</width>
+      <width>1431</width>
       <height>231</height>
      </rect>
     </property>

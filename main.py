@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+from random import randint
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -15,7 +16,8 @@ from UI.form import Ui_Form
 
 
 class MatplotlibDraw(FigureCanvas):
-    def __init__(self, parent=None, width=8, height=5, dpi=100):
+    """绘图类"""
+    def __init__(self, parent=None, width=20, height=10, dpi=110):
         super(MatplotlibDraw, self).__init__()
         plt.rcParams['font.family'] = ['SimHei']  # 更换字体使中文显示正常
         plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
@@ -27,6 +29,33 @@ class MatplotlibDraw(FigureCanvas):
         self.all_datas = []
         self.font_size = None
         self.data = []
+        self.color = ['black', 'linen', 'forestgreen', 'slategrey', 'k', 'bisque', 'limegreen', 'lightsteelblue',
+                      'dimgray', 'darkorange', 'darkgreen', 'cornflowerblue', 'dimgrey', 'burlywood', 'g', 'royalblue',
+                      'gray', 'antiquewhite', 'green', 'ghostwhite', 'grey', 'tan', 'lime', 'lavender', 'darkgray',
+                      'navajowhite', 'seagreen', 'midnightblue', 'darkgrey', 'blanchedalmond', 'mediumseagreen', 'navy',
+                      'silver', 'papayawhip', 'springgreen', 'darkblue', 'lightgray', 'moccasin', 'mintcream',
+                      'mediumblue', 'lightgrey', 'orange', 'mediumspringgreen', 'b', 'gainsboro', 'wheat',
+                      'mediumaquamarine', 'blue', 'whitesmoke', 'oldlace', 'aquamarine', 'slateblue', 'w',
+                      'floralwhite', 'turquoise', 'darkslateblue', 'white', 'darkgoldenrod', 'lightseagreen',
+                      'mediumslateblue', 'snow', 'goldenrod', 'mediumturquoise', 'mediumpurple', 'rosybrown',
+                      'cornsilk', 'azure', 'rebeccapurple', 'lightcoral', 'gold', 'lightcyan', 'blueviolet',
+                      'indianred', 'lemonchiffon', 'paleturquoise', 'indigo', 'brown', 'khaki', 'darkslategray',
+                      'darkorchid', 'firebrick', 'palegoldenrod', 'darkslategrey', 'darkviolet', 'maroon', 'darkkhaki',
+                      'teal', 'mediumorchid', 'darkred', 'ivory', 'darkcyan', 'thistle', 'r', 'beige', 'c', 'plum',
+                      'red', 'lightyellow', 'aqua', 'violet', 'mistyrose', 'lightgoldenrodyellow', 'cyan', 'purple',
+                      'salmon', 'olive', 'darkturquoise', 'darkmagenta', 'tomato', 'y', 'cadetblue', 'm', 'darksalmon',
+                      'yellow', 'powderblue', 'fuchsia', 'coral', 'olivedrab', 'lightblue', 'magenta', 'orangered',
+                      'yellowgreen', 'deepskyblue', 'orchid', 'lightsalmon', 'darkolivegreen', 'skyblue',
+                      'mediumvioletred', 'sienna', 'greenyellow', 'lightskyblue', 'deeppink', 'seashell', 'chartreuse',
+                      'steelblue', 'hotpink', 'chocolate', 'lawngreen', 'aliceblue', 'lavenderblush', 'saddlebrown',
+                      'honeydew', 'dodgerblue', 'palevioletred', 'sandybrown', 'darkseagreen', 'lightslategray',
+                      'crimson', 'peachpuff', 'palegreen', 'lightslategrey', 'pink', 'peru', 'lightgreen', 'slategray',
+                      'lightpink']
+        self.color_p = None
+
+        # 状态
+        self.display_data = False  # 是否显示数据
+        self.display_table_name = False  # 是否显示表名
 
         # 创建画布
         self.fig = Figure(figsize=(width, height), dpi=dpi)
@@ -41,8 +70,7 @@ class MatplotlibDraw(FigureCanvas):
         FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
-
-    def receive_values(self, rol, col, data_nums, datalist, fontsize, data):
+    def receive_values(self, rol, col, data_nums, datalist, fontsize, data, name):
         """接收主窗口传递的绘图参数"""
         print(rol, col, data_nums, datalist, fontsize)
         # 声明绘图参数
@@ -52,11 +80,12 @@ class MatplotlibDraw(FigureCanvas):
         self.all_datas = datalist
         self.font_size = fontsize
         self.data = data
-        self.drawing()
+        self.table_name:str = name
 
-    def drawing(self):
+    def drawing(self, type:str):
         self.fig.clear()
         self.fig.clf()
+
         for i in range(self.data_nums):
             # 列表初始化
             number_data = []
@@ -71,21 +100,95 @@ class MatplotlibDraw(FigureCanvas):
             # plt.subplot(self.table_rol, self.table_col, (i + 1))
             self.ax = self.fig.add_subplot(self.table_rol, self.table_col, (i + 1))
             self.ax.cla()
-            self.ax.plot(year_data, number_data)
-            self.ax.scatter(year_data, number_data, s=16)
+
+            # self.ax.bar(year_data, number_data, color='c')
+            # self.ax.plot(year_data, number_data, color='r')
+
+            if type == 'line':
+                self.ax.set(xlim=(year_data[0] - 0.5, year_data[-1] + 0.5))
+
+                if self.color_p:
+                    if self.color_p == '__random':
+                        self.ax.plot(year_data, number_data, color=self.color[randint(0, 155)])
+                        self.ax.scatter(year_data, number_data, s=16, c=self.color[randint(0, 155)])
+
+                    else:
+                        self.ax.plot(year_data, number_data, color=self.color_p)
+                        self.ax.scatter(year_data, number_data, s=16, c=self.color_p)
+
+                else:
+                    self.ax.plot(year_data, number_data)
+                    self.ax.scatter(year_data, number_data, s=16)
+
+            if type == 'pot':
+                self.ax.set(xlim=(year_data[0] - 0.5, year_data[-1] + 0.5))
+
+                if self.color_p:
+                    if self.color_p == '__random':
+                        self.ax.scatter(year_data, number_data, s=16, c=self.color[randint(0, 155)])
+                    else:
+                        self.ax.scatter(year_data, number_data, s=16, c=self.color_p)
+                else:
+                    self.ax.scatter(year_data, number_data, s=16)
+
+            if type == 'bar':
+                if number_data.count(None):
+                     number_data[number_data.index(None)] = 0
+
+                self.ax.set(xlim=(year_data[0] - 0.5, year_data[-1] + 0.5))
+                if self.color_p:
+                    if self.color_p == '__random':
+                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color[randint(0, 155)])
+
+                    else:
+                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color_p)
+
+                else:
+                    self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1)
+
+            if type == 'cake':
+                if number_data.count(None):
+                    number_data[number_data.index(None)] = 0
+
+                for idx, data in enumerate(number_data):
+                    if data <= 0:
+                        number_data.pop(idx)
+                        year_data.pop(idx)
+
+                _x = list(range(1, len(number_data) + 1))
+                colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, len(_x)))
+
+                self.ax.tick_params(bottom=False, top=False, left=False, right=False)
+                self.ax.spines['left'].set_color('None')
+                # self.ax.spines['bottom'].set_color('None')
+                self.ax.set_yticks([])
+                self.ax.set_xticks([])
+
+                if self.color_p:
+                    if self.color_p == '__random':
+                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color[randint(0, 155)])
+
+                    else:
+                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color_p)
+
+                else:
+                    self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
+                                autopct='%.2f%%',
+                                labeldistance=1.1,
+                                wedgeprops={"linewidth": 1, "edgecolor": "white"},
+                                textprops={'fontsize': self.font_size * 3}, frame=True)
 
             x_major_locator = MultipleLocator(2)
-
-            plt.xlim(year_data[0] - 0.5, year_data[-1] + 0.5)
 
             # # 添加图例和标签
             # ax = plt.gca()
             # 为每个点绘制数据标签
-            for point in range(len(year_data)):
-                if not number_data[point]:
-                    continue
-                self.ax.text(year_data[point], number_data[point], '%.1f' % number_data[point],
-                        fontdict={'fontsize': self.font_size * 3.8}, ha='center', va='bottom')
+            if self.display_data:  # 如果显示数据
+                for point in range(len(year_data)):
+                    if not number_data[point]:
+                        continue
+                    self.ax.text(year_data[point], number_data[point], '%.1f' % number_data[point],
+                                 fontdict={'fontsize': self.font_size * 3.8}, ha='center', va='bottom')
 
                 """废弃调整字符位置"""
                 # if point != 0 and abs(number_data[point] - number_data[point - 1]) / abs(max(number_data[point], number_data[point - 1])) > 0.2:
@@ -96,9 +199,11 @@ class MatplotlibDraw(FigureCanvas):
                 #             fontdict={'fontsize': font_size * 5}, ha='center', va='center')
 
             # ax.set_xlabel('年份', fontsize=10)
-            if not len(self.data.values[i + 2][0].split(",")[0]) > 12:
+
+            if not len(self.data.values[i + 2][0].split(",")[0]) > 12 and type != 'cake':
                 self.ax.set_ylabel(self.data.values[i + 2][0].split(",")[0], fontsize=10)
-            self.ax.set_title(self.data.values[i + 2][0].split(",")[0], fontsize=12)
+            if self.display_table_name:
+                self.ax.set_title(self.data.values[i + 2][0].split(",")[0], fontsize=12)
 
             # 调整横坐标和纵坐标的范围
             # plt.xlim(yearss[0] + 10, yearss[-1] + 10)
@@ -108,15 +213,32 @@ class MatplotlibDraw(FigureCanvas):
             self.ax.xaxis.set_major_locator(x_major_locator)
             # self.ax.xticks(rotation=20, fontsize=10)
             self.ax.spines['right'].set_color('None')  # 选中上方的脊梁并替换为空
-            self.ax.spines['top'].set_color('None')  # <- now autocompletes
-
+            self.ax.spines['top'].set_color('None')
             self.ax.xaxis.set_ticks_position('bottom')  # 设置x轴位置
             self.ax.yaxis.set_ticks_position('left')  # 设置y轴位置
-            # ax.spines['bottom'].set_position(('data', yearss[i][0] * 0.95))  # 选中并更改位置
-            # ax.spines['left'].set_position(('data', yearss[i][0] - 0.4))
 
+        self.fig.subplots_adjust(hspace=0.6, wspace=0.5)
         self.fig.canvas.draw()  # 这里注意是画布重绘，self.figs.canvas
         self.fig.canvas.flush_events()  # 画布刷新self.figs.canvas
+
+    def save_drawing(self, type:str):
+        """保存生成的图像"""
+        try:
+            if type == '矢量图':
+                # 读取当前时间
+                time_log = time.strftime("%Y-%m-%d %H:%M:%S")
+                # 保存
+                self.fig.savefig(f'.\\output\\{time_log.replace(" ", "_").replace(":", "_")}.eps', dpi=300)
+            if type == 'PNG':
+                # 读取当前时间
+                time_log = time.strftime("%Y-%m-%d %H:%M:%S")
+                # 保存
+                self.fig.savefig(f'.\\output\\{time_log.replace(" ", "_").replace(":", "_")}.png', dpi=300)
+
+        except Exception as e:
+            pass
+        else:
+            pass
 
 """子线程测试"""
 # class WindowsThread(QThread, Ui_Form):
@@ -143,36 +265,34 @@ class MyWindows(QWidget, Ui_Form):
         # self.textBrowser.moveCursor(-1)
 
         # 变量初始化
-        self.table_aim = None       # 当前表格名称
-        self.table_nums = None      # 声明表的个数
-        self.num_cols = None        # 预生成图表的列
-        self.num_rows = None        # 预生成图表的列
-        self.data = None            # 表格数据
-        self.font_size = None       # 字体大小
-        self.data_nums = None       # 数据个数
-        self.all_datas = []       # 处理后的表格数据
-        self.year_data = []       # 横轴年份数据
-        self.number_data = []     # 纵轴数据
-        self.table_sub_datas = []   # 表格条目数据
-        self.figure1 = None         # 定义绘图对象
+        self.table_draw_on = False  # 表格是否绘制
+        self.table_aim = None  # 当前表格名称
+        self.table_nums = None  # 声明表的个数
+        self.num_cols = None  # 预生成图表的列
+        self.num_rows = None  # 预生成图表的列
+        self.data = None  # 表格数据
+        self.font_size = None  # 字体大小
+        self.data_nums = None  # 数据个数
+        self.all_datas = []  # 处理后的表格数据
+        self.year_data = []  # 横轴年份数据
+        self.number_data = []  # 纵轴数据
+        self.table_sub_datas = []  # 表格条目数据
+        self.figure1 = None  # 定义绘图对象
+        self.aim_colors = ['蓝色', '青色', '红色', '品红', '紫色', '随机颜色']
 
         # 表格读取
         self.read_tables()
 
         """绘图部分"""
-
-
-        # 开始作图
-        # data = list(range(1000))
-        # data2 = list(range(1000, 2000))
-        # self.figure_1.axes.plot(data, data2)
-        # self.figure_1.axes1.plot(data, data)
+        # 创建绘图对象
+        self.figure1 = MatplotlibDraw()
 
     def signal_init(self):
         """信号的相关绑定与声明"""
         self.list_table.itemClicked.connect(self.select_table)
         self.pushButton_drawing.clicked.connect(self.draw_tables)
         self.pushButtont_refresh_read.clicked.connect(self.flushed_tables)
+        self.pushButton_save_img.clicked.connect(self.save_img)
 
     def windows_init(self):
         pass
@@ -265,7 +385,7 @@ class MyWindows(QWidget, Ui_Form):
         # 自动生成字体大小
         self.fig_size = (self.num_cols * 3, self.num_rows * 3)
         self.font_size = min(self.fig_size) / max(self.num_rows, self.num_cols)
-        
+
         # 年份数据处理
         years = self.data.values
 
@@ -301,8 +421,32 @@ class MyWindows(QWidget, Ui_Form):
             except:
                 pass
 
-            # 创建绘图对象
-            self.figure1 = MatplotlibDraw()
+            # 检测相关参数
+            if self.checkBox_show_data_v.isChecked():
+                self.figure1.display_data = True  # 显示数据
+            else:
+                self.figure1.display_data = False  # 关闭显示数据
+            if self.checkBox_show_table_name.isChecked():
+                self.figure1.display_table_name = True  # 显示表名
+            else:
+                self.figure1.display_table_name = False  # 关闭显示表名
+
+            if self.comboBox_select_color.currentText() == '蓝色':
+                self.figure1.color_p = 'b'
+            elif self.comboBox_select_color.currentText() == '青色':
+                self.figure1.color_p = 'c'
+            elif self.comboBox_select_color.currentText() == '红色':
+                self.figure1.color_p = 'r'
+            elif self.comboBox_select_color.currentText() == '品红':
+                self.figure1.color_p = 'm'
+            elif self.comboBox_select_color.currentText() == '紫色':
+                self.figure1.color_p = 'purple'
+            elif self.comboBox_select_color.currentText() == '黄色':
+                self.figure1.color_p = 'y'
+            elif self.comboBox_select_color.currentText() == '随机颜色':
+                self.figure1.color_p = '__random'
+            else:
+                self.figure1.color_p = False
 
             # 加入垂直布局
             self.vlayout_show_plot.addWidget(self.figure1)
@@ -313,18 +457,45 @@ class MyWindows(QWidget, Ui_Form):
                 data_nums=self.data_nums,
                 datalist=self.all_datas,
                 fontsize=self.font_size,
-                data=self.data)
-            # try:
-            #     self.figure1.drawing()
-            #
-            # except Exception as e:
-            #     self.submit_log_inf(f"绘制错误！系统返回:\n{e}")
-            #
-            # else:
-            #     self.submit_log_inf(f"绘制表格\"{self.table_aim}\"成功!")
+                data=self.data,
+                name=self.table_aim)
+
+            try:
+                if self.radioButton_type_of_line.isChecked():
+                    self.figure1.drawing('line')
+
+                if self.radioButton_type_of_pot.isChecked():
+                    self.figure1.drawing('pot')
+
+                if self.radioButton_bar.isChecked():
+                    self.figure1.drawing('bar')
+
+                if self.radioButton_cake.isChecked():
+                    self.figure1.drawing('cake')
+
+            except Exception as e:
+                self.submit_log_inf(f"绘制错误！系统返回:\n{e}")
+
+            else:
+                # self.submit_log_inf(f"绘制表格\"{self.table_aim}\"成功!")
+                self.table_draw_on = True
 
         else:
             self.submit_log_inf("表格信息无效！请重新选择", 0)
+
+    def save_img(self):
+        if self.table_draw_on:
+            if self.radioButton_eps.isChecked():
+                self.figure1.save_drawing('矢量图')
+
+            elif self.radioButton_png.isChecked():
+                self.figure1.save_drawing('PNG')
+
+            else:
+                self.submit_log_inf("请选择要保存的格式", 0)
+
+        else:
+            self.submit_log_inf("请先绘制图像", 0)
 
     def submit_log_inf(self, info, env=1):
         """上传日志信息到窗口的textBrowser"""

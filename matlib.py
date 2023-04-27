@@ -62,8 +62,9 @@ for i in range(data_nums):
 
     # 绘制折线图
     plt.subplot(num_cols, num_rows, (i + 1))
-    plt.plot(year_data, number_data)
-    plt.scatter(year_data, number_data, s=16)
+    # plt.plot(year_data, number_data)
+    # plt.scatter(year_data, number_data, s=16)
+    # plt.bar(year_data, number_data, width=1, linewidth=0.7, edgecolor="white")
 
     x_major_locator = MultipleLocator(2)
 
