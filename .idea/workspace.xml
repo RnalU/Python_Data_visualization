@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0198b50a-f7c7-41b1-9299-1f22424d479c" name="变更" comment="更新">
+    <list default="true" id="0198b50a-f7c7-41b1-9299-1f22424d479c" name="变更" comment="添加了一些新功能">
       <change afterPath="$PROJECT_DIR$/data_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/form.ui" beforeDir="false" afterPath="$PROJECT_DIR$/UI/form.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,6 +197,7 @@
       <workItem from="1682482370236" duration="1079000" />
       <workItem from="1682519185262" duration="4210000" />
       <workItem from="1682556113679" duration="25609000" />
+      <workItem from="1682652383509" duration="451000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1682578928023</created>
@@ -210,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682578928023</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="添加了一些新功能">
+      <created>1682652635013</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682652635013</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +261,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="更新" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新" />
+    <MESSAGE value="添加了一些新功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加了一些新功能" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
