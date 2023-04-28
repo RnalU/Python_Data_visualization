@@ -13,8 +13,9 @@ CSV数据源自于国家统计局网站导出的格式。项目的数据也按�
 
 项目环境基于 Anaconda Python3.9进行搭建，因此需要安装Anaconda，和一个支持conda语法的terminal 一般Windows的CMD即可满足。
 
+验证是否Anaconda安装成功
+
 ```
-// 验证是否Anaconda安装成功
 conda info -e	// 输出Anaconda内所有的虚拟环境名称
 conda -V        // 输出Anaconda当前版本
 ```
@@ -23,12 +24,91 @@ conda -V        // 输出Anaconda当前版本
 
 ```
 conda create -n "你的虚拟环境名称(py3.9)" python=3.9	
-cd /../../"准备克隆的目录路径"
-git clone https://github.com/RnalU/Python_Data_visualization.git	// 使用git进行克隆，如果未找到命令，请添加环境变量
-															   // 或安装git
-cd ./Python_Data_visualization	// 进入目录
-conda activate py3.9 		   // 进入你的虚拟环境
-pip install -r requirement.txt	// 安装依赖
-python main.py				   // 执行main.py
 ```
+
+进入克隆目录
+
+```
+cd /../../"准备克隆的目录路径"
+```
+
+使用GIT(我一般用GIT for Windows) 进行克隆
+
+```
+git clone https://github.com/RnalU/Python_Data_visualization.git
+```
+
+进入目录
+
+```
+cd ./Python_Data_visualization
+```
+
+进入你的虚拟环境
+
+```
+conda activate py3.9
+```
+
+安装依赖
+
+```
+pip install -r requirement.txt
+```
+
+执行main.py
+
+```
+python main.py
+```
+
+程序正常运行即可
+
+## 文件结构
+
+UI: 储存应用程序所使用资源的文件夹
+
+table: 表格放置位置，如果要对某个表格可视化，请把这个表格放到"table"文件夹
+
+output: 如果你需要将生成的数据导出，请在可交互界面内执行相应操作后，检查该文件夹。一般文件会生成在这里。
+
+## 功能介绍
+
+目前支持读取从国家统计局下载的年度数据的CSV表格，请不要尝试其它类型的数据表格(一定会报错) 当然解决的方法也很简单，加一些分支判断结构即可(但是我懒。)
+
+对于数据可视化，因为第一次用matplotlib，绘制的图像较丑，但是也支持一定程度的自定义
+
+程序开始会将读取的表格中的每一个条目以折线图的方式显示出来，后续可以对每一个子图进行一定程度的修改。
+
+程序还有将图像输出的功能，保存的格式有PNG和矢量图格式，所有文件均输出至output文件夹
+
+可能以后会对项目进行完善，使用更漂亮的图表，或其他形式，例如输出Html形式(大概没有可能)
+
+## TODO
+
+### 要添加的功能
+
+添加一些好看的颜色
+
+添加清空画布功能
+
+完善表格预览，绘制单个表格功能
+
+添加清空日志功能
+
+增加某个子图或单个图表的Y轴，展示更个性化的图表
+
+### 要修复的BUG
+
+对于子图修改的随机颜色后，继续绘制颜色将继续随机，无法保存
+
+黄色无法显示
+
+饼图无法修改颜色，且选择除默认以外的颜色绘制后不会显示饼图
+
+选择全部绘制与单独绘制的RadioButton可以取消选择
+
+## 结语
+
+这仅仅只是一次大学牲的Python结课项目作业，没有太多技术含量(几乎没有)，与市面上的产品肯定有很大的差距，我们的能力也有限，因此可能当前的项目效果并不是很理想，不过学习往往是曲折前进，螺旋上升的。日后我们可能会有更多的项目作业，希望能有更好的表现。就这样。
 
