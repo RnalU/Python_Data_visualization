@@ -7,10 +7,9 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.ticker import MultipleLocator, FormatStrFormatter
-from PyQt5.QtWidgets import QApplication, QWidget, QTableWidgetItem, QSizePolicy
-from PyQt5.QtCore import pyqtSignal, Qt, QThread, QTimer, QWaitCondition, QMutex
-from PyQt5.QtGui import QImage, QPixmap
+from matplotlib.ticker import MultipleLocator
+from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy
+from PyQt5.QtCore import pyqtSignal
 
 from UI.form import Ui_Form
 
@@ -489,18 +488,18 @@ class MatplotlibDraw(FigureCanvas):
         self.fig.canvas.draw()  # 这里注意是画布重绘，self.figs.canvas
         self.fig.canvas.flush_events()  # 画布刷新self.figs.canvas
 
-    def save_drawing(self, type: str):
+    def save_drawing(self, type_pix: str):
         """保存生成的图像"""
         time_log = 0
         try:
-            if type == '矢量图':
+            if type_pix == '矢量图':
                 # 读取当前时间
                 time_log = time.strftime("%Y-%m-%d %H:%M:%S")
                 # 保存
                 self.fig.savefig(
                     f'.\\output\\{time_log.replace(" ", "_").replace(":", "_")}-{self.table_name.replace(".csv", "")}.eps',
                     dpi=300)
-            if type == 'PNG':
+            if type_pix == 'PNG':
                 # 读取当前时间
                 time_log = time.strftime("%Y-%m-%d %H:%M:%S")
                 # 保存
@@ -512,11 +511,11 @@ class MatplotlibDraw(FigureCanvas):
             pass
 
         else:
-            if type == '矢量图':
+            if type_pix == '矢量图':
                 self.commite_log.emit(
                     f'生成成功！输出文件位于:\'./output/{time_log.replace(" ", "_").replace(":", "_")}-{self.table_name.replace(".csv", "")}.eps\'')
 
-            elif type == 'PNG':
+            elif type_pix == 'PNG':
                 self.commite_log.emit(
                     f'生成成功！输出文件位于:\'./output/{time_log.replace(" ", "_").replace(":", "_")}-{self.table_name.replace(".csv", "")}.png\'')
 
@@ -556,6 +555,7 @@ class MyWindows(QWidget, Ui_Form):
         self.num_rows = None  # 预生成图表的列
         self.data = None  # 表格数据
         self.font_size = None  # 字体大小
+        self.fig_size = None  # 画布大小
         self.data_nums = None  # 数据个数
         self.all_datas = []  # 处理后的表格数据
         self.year_data = []  # 横轴年份数据
@@ -714,7 +714,8 @@ class MyWindows(QWidget, Ui_Form):
             """调用绘图对象, 绘制图像"""
             try:
                 self.vlayout_show_plot.removeWidget(self.figure1)
-            except:
+
+            except Exception as e:
                 pass
 
             # 检测相关参数
