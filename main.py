@@ -1,3 +1,4 @@
+import shutil
 import sys
 import os
 import time
@@ -8,7 +9,7 @@ from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.ticker import MultipleLocator
-from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy, QTableWidgetItem
 from PyQt5.QtCore import pyqtSignal
 
 from UI.form import Ui_Form
@@ -54,6 +55,36 @@ class MatplotlibDraw(FigureCanvas):
                       'honeydew', 'dodgerblue', 'palevioletred', 'sandybrown', 'darkseagreen', 'lightslategray',
                       'crimson', 'peachpuff', 'palegreen', 'lightslategrey', 'pink', 'peru', 'lightgreen', 'slategray',
                       'lightpink']  # 颜色集合
+        self.color_cake = ['Accent', 'Accent_r', 'Blues', 'Blues_r', 'BrBG', 'BrBG_r', 'BuGn', 'BuGn_r', 'BuPu',
+                           'BuPu_r', 'CMRmap', 'CMRmap_r', 'Dark2', 'Dark2_r', 'GnBu', 'GnBu_r', 'Greens', 'Greens_r',
+                           'Greys', 'Greys_r', 'OrRd', 'OrRd_r', 'Oranges', 'Oranges_r', 'PRGn', 'PRGn_r', 'Paired',
+                           'Paired_r', 'Pastel1', 'Pastel1_r', 'Pastel2', 'Pastel2_r', 'PiYG', 'PiYG_r', 'PuBu',
+                           'PuBuGn', 'PuBuGn_r', 'PuBu_r', 'PuOr', 'PuOr_r', 'PuRd', 'PuRd_r', 'Purples', 'Purples_r',
+                           'RdBu', 'RdBu_r', 'RdGy', 'RdGy_r', 'RdPu', 'RdPu_r', 'RdYlBu', 'RdYlBu_r', 'RdYlGn',
+                           'RdYlGn_r', 'Reds', 'Reds_r', 'Set1', 'Set1_r', 'Set2', 'Set2_r', 'Set3', 'Set3_r',
+                           'Spectral', 'Spectral_r', 'Wistia', 'Wistia_r', 'YlGn', 'YlGnBu', 'YlGnBu_r', 'YlGn_r',
+                           'YlOrBr', 'YlOrBr_r', 'YlOrRd', 'YlOrRd_r', 'afmhot', 'afmhot_r', 'autumn', 'autumn_r',
+                           'binary', 'binary_r', 'bone', 'bone_r', 'brg', 'brg_r', 'bwr', 'bwr_r', 'cividis',
+                           'cividis_r', 'cool', 'cool_r', 'coolwarm', 'coolwarm_r', 'copper', 'copper_r', 'cubehelix',
+                           'cubehelix_r', 'flag', 'flag_r', 'gist_earth', 'gist_earth_r', 'gist_gray', 'gist_gray_r',
+                           'gist_heat', 'gist_heat_r', 'gist_ncar', 'gist_ncar_r', 'gist_rainbow', 'gist_rainbow_r',
+                           'gist_stern', 'gist_stern_r', 'gist_yarg', 'gist_yarg_r', 'gnuplot', 'gnuplot2',
+                           'gnuplot2_r', 'gnuplot_r', 'gray', 'gray_r', 'hot', 'hot_r', 'hsv', 'hsv_r', 'inferno',
+                           'inferno_r', 'jet', 'jet_r', 'magma', 'magma_r', 'nipy_spectral', 'nipy_spectral_r', 'ocean',
+                           'ocean_r', 'pink', 'pink_r', 'plasma', 'plasma_r', 'prism', 'prism_r', 'rainbow',
+                           'rainbow_r', 'seismic', 'seismic_r', 'spring', 'spring_r', 'summer', 'summer_r', 'tab10',
+                           'tab10_r', 'tab20', 'tab20_r', 'tab20b', 'tab20b_r', 'tab20c', 'tab20c_r', 'terrain',
+                           'terrain_r', 'turbo', 'turbo_r', 'twilight', 'twilight_r', 'twilight_shifted',
+                           'twilight_shifted_r', 'viridis', 'viridis_r', 'winter', 'winter_r']
+        self.color_cake_dict = {
+            'b': "Blues_r",
+            'c': "ocean_r",
+            'r': "Reds",
+            'm': "spring",
+            'purple': "Purples",
+            'y': "YlGn",
+            '__random': "__random"
+        }
         self.color_p = None  # 表格绘制颜色
         self.sub_change = False  # 是否修改子图
         self.sub_idx = None  # 如果修改子图, 则子图对应的索引
@@ -171,7 +202,15 @@ class MatplotlibDraw(FigureCanvas):
 
                 # 颜色渐变
                 _x = list(range(1, len(number_data) + 1))
-                colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, len(_x)))
+                print(self.color_p)
+                if self.color_p:
+                    if self.color_p != "__random":
+                        colors = plt.get_cmap(self.color_cake_dict[self.color_p])(np.linspace(0.2, 0.7, len(_x)))
+                    else:
+                        colors = plt.get_cmap(self.color_cake[randint(0, 155)])(np.linspace(0.2, 0.7, len(_x)))
+
+                else:
+                    colors = plt.get_cmap("Blues")(np.linspace(0.2, 0.7, len(_x)))
 
                 # 坐标轴处理
                 self.ax.tick_params(bottom=False, top=False, left=False, right=False)
@@ -180,20 +219,11 @@ class MatplotlibDraw(FigureCanvas):
                 self.ax.set_yticks([])
                 self.ax.set_xticks([])
 
-                if self.color_p:
-                    if self.color_p == '__random':
-                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1,
-                                    color=self.color[randint(0, 155)])
-
-                    else:
-                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color_p)
-
-                else:
-                    self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
-                                autopct='%.2f%%',
-                                labeldistance=1.1,
-                                wedgeprops={"linewidth": 1, "edgecolor": "white"},
-                                textprops={'fontsize': self.font_size * 3}, frame=True)
+                self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
+                            autopct='%.2f%%',
+                            labeldistance=1.1,
+                            wedgeprops={"linewidth": 1, "edgecolor": "white"},
+                            textprops={'fontsize': self.font_size * 3}, frame=True)
 
             x_major_locator = MultipleLocator(2)
 
@@ -229,13 +259,11 @@ class MatplotlibDraw(FigureCanvas):
                             """调整字符位置"""
                             print(abs(number_data[point] - number_data[point - 1]) / rule)
                             if point > 0:
-                                if (abs(number_data[point] - number_data[point - 1])) / rule < 0.10 and number_data[
-                                    point] > number_data[point - 1]:
+                                if (abs(number_data[point] - number_data[point - 1])) / rule < 0.10 and number_data[point] > number_data[point - 1]:
                                     self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                                  fontdict={'fontsize': self.font_size * 3.3}, ha='center', va='bottom')
 
-                                elif (abs(number_data[point] - number_data[point - 1])) / rule < 0.12 and number_data[
-                                    point] < number_data[point - 1]:
+                                elif (abs(number_data[point] - number_data[point - 1])) / rule < 0.12 and number_data[point] < number_data[point - 1]:
                                     self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                                  fontdict={'fontsize': self.font_size * 3.3}, ha='center', va='top')
                                 else:
@@ -300,7 +328,7 @@ class MatplotlibDraw(FigureCanvas):
         self.draw_detail[self.sub_idx][2] = display_data
         self.draw_detail[self.sub_idx][3] = display_name
 
-        print(self.data_nums)
+        print(self.draw_detail)
 
         for i in range(self.data_nums):
             # 列表初始化
@@ -382,7 +410,7 @@ class MatplotlibDraw(FigureCanvas):
 
                 # 颜色渐变
                 _x = list(range(1, len(number_data) + 1))
-                colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, len(_x)))
+                # colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, len(_x)))
 
                 # 坐标轴处理
                 self.ax.tick_params(bottom=False, top=False, left=False, right=False)
@@ -393,18 +421,27 @@ class MatplotlibDraw(FigureCanvas):
 
                 if table_line_color:
                     if table_line_color == '__random':
-                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1,
-                                    color=self.color[randint(0, 155)])
+                        colors = plt.get_cmap(self.color_cake[randint(0, 155)])(np.linspace(0.2, 0.7, len(_x)))
+                        self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
+                                    autopct='%.2f%%',
+                                    labeldistance=1.1,
+                                    wedgeprops={"linewidth": 1, "edgecolor": "white"},
+                                    textprops={'fontsize': self.font_size * 3}, frame=True)
 
                     else:
-                        self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1,
-                                    color=table_line_color)
+                        colors = plt.get_cmap(self.color_cake_dict[table_line_color])(np.linspace(0.2, 0.7, len(_x)))
+                        self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
+                                    autopct='%.2f%%',
+                                    labeldistance=1.1,
+                                    wedgeprops={"linewidth": 1, "edgecolor": "white"},
+                                    textprops={'fontsize': self.font_size * 3}, frame=True)
 
                 else:
+                    colors = plt.get_cmap('Blues')(np.linspace(0.2, 0.7, len(_x)))
                     self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
                                 autopct='%.2f%%',
                                 labeldistance=1.1,
-                                wedgeprops={"linewidth": 1, "edgecolor": "white"},
+                                wedgeprops={"line-width": 1, "edge color": "white"},
                                 textprops={'fontsize': self.font_size * 3}, frame=True)
 
             x_major_locator = MultipleLocator(2)
@@ -440,13 +477,11 @@ class MatplotlibDraw(FigureCanvas):
                         if _sums > 10000:
                             """调整字符位置"""
                             if point > 0:
-                                if (abs(number_data[point] - number_data[point - 1])) / rule < 0.10 and number_data[
-                                    point] > number_data[point - 1]:
+                                if (abs(number_data[point] - number_data[point - 1])) / rule < 0.10 and number_data[point] > number_data[point - 1]:
                                     self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                                  fontdict={'fontsize': self.font_size * 3.3}, ha='center', va='bottom')
 
-                                elif (abs(number_data[point] - number_data[point - 1])) / rule < 0.12 and number_data[
-                                    point] < number_data[point - 1]:
+                                elif (abs(number_data[point] - number_data[point - 1])) / rule < 0.12 and number_data[point] < number_data[point - 1]:
                                     self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                                  fontdict={'fontsize': self.font_size * 3.3}, ha='center', va='top')
                                 else:
@@ -562,7 +597,7 @@ class MyWindows(QWidget, Ui_Form):
         self.number_data = []  # 纵轴数据
         self.table_sub_datas = []  # 表格条目数据
         self.figure1 = None  # 定义绘图对象
-        self.aim_colors = ['蓝色', '青色', '红色', '品红', '紫色', '随机颜色']  # 定义颜色
+        self.aim_colors = ['蓝色', '青色', '红色', '品红', '紫色', '黄色', '随机颜色']  # 定义颜色
         self.colors_dict = {
             '蓝色': 'b',
             '青色': 'c',
@@ -589,9 +624,101 @@ class MyWindows(QWidget, Ui_Form):
         self.pushButtont_refresh_read.clicked.connect(self.flushed_tables)
         self.pushButton_save_img.clicked.connect(self.save_img)
         self.pushButton_subplot_change.clicked.connect(self.subplot_change)
+        self.pushButton_close_table.clicked.connect(self.clear_table)
+        self.pushButton_commit_table.clicked.connect(self.change_table)
 
     def windows_init(self):
         pass
+
+    def get_table(self):
+        """获取选择的表格"""
+        col = -1
+        for line_list in self.data.values:
+            line: str = line_list[0]
+            if col == len(line.split(',')):
+                break
+            col = len(line.split(','))  # 获取行数
+        row = len(self.data.values)  # 获取列数
+        self.label_table_show_inf.setText(f"当前表格:{self.table_aim}   行:{row}   列{col}")
+        self.label_table_show_inf.adjustSize()
+        self.tableWidget_table.setColumnCount(col)
+        self.tableWidget_table.setRowCount(row)
+
+        max_col_len = 0
+        # 写入表格数据
+        for row, _line in enumerate(self.data.values):
+            line = _line[0].split(',')
+
+            # 得到行数据的最大值
+            if len(line[0]) > max_col_len:
+                max_col_len = len(line[0])
+                if max_col_len > 20:
+                    max_col_len = 20
+
+            for col, line_item in enumerate(line):
+                temp = QTableWidgetItem(line_item)
+                if line_item is None:
+                    temp = QTableWidgetItem("None")
+                    self.tableWidget_table.setItem(row, col, temp)
+                else:
+                    self.tableWidget_table.setItem(row, col, temp)
+
+                # 调整行的大小
+                self.tableWidget_table.setColumnWidth(0, max_col_len * 18)
+
+                # 设置水平竖直表头是否显示
+                self.tableWidget_table.horizontalHeader().setVisible(True)
+                self.tableWidget_table.verticalHeader().setVisible(False)
+
+    def clear_table(self):
+        """清空tableWidget区域"""
+        self.tableWidget_table.clear()
+        self.label_table_show_inf.setText("当前表格:None")
+
+    def change_table(self):
+        """读取当前表格的数据并重新写入到文件"""
+        if self.label_table_show_inf.text().split(':')[1] != "None" and self.label_table_show_inf.text().split(':')[1].count(self.table_aim):
+            # 读取tableWidget表格数据
+            lines_str = ["数据库：年度数据\n"]
+
+            # 得到行
+            rows = len(self.data.values)
+            for row in range(rows):
+                line_item_list = []
+                for col in range(len(self.data.values[row][0].split(","))):
+                    line_item = self.tableWidget_table.item(row, col).text()
+                    line_item_list.append(line_item)
+                lines_str.append(",".join(line_item_list) + '\n')
+            # 尝试修改表格, 先进行备份(检测是否存在bak文件夹, 入果不存在则创建)
+            if os.path.exists("bak"):
+                pass
+            else:
+                os.mkdir("./bak")
+
+            if os.path.exists("bak"):
+                try:
+                    # 记录时间
+                    time_log = time.strftime("%Y-%m-%d %H:%M:%S")
+                    shutil.copy(f"./table/{self.table_aim}",
+                                f"./bak/{time_log.replace(' ', '-').replace(':', '-')}-{self.table_aim}.bak")
+                except Exception as e:
+                    self.submit_log_inf(f"表格文件{self.table_aim}备份失败！系统返回{e}")
+
+                else:
+                    self.submit_log_inf(
+                        f"文件{self.table_aim}备份成功, 已保存在./bak/{time_log.replace(' ', '-').replace(':', '-')}-{self.table_aim}.bak")
+                # 开始重写表格文件
+                current_table = open(f'./table/{self.table_aim}', 'w', encoding="GBK")
+
+                for line_idx in range(rows + 1):  # 因为pandas读取CSV表格会自动忽略第一列，因此需要自动将第一行表格内容补全并循环次数多一次
+                    current_table.write(lines_str[line_idx])
+                current_table.close()
+
+            else:
+                self.submit_log_inf("bak备份文件夹创建失败，请检查程序目录并自行创建", 0)
+
+        else:
+            self.submit_log_inf("请选择一个表格", 0)
 
     def read_tables(self):
         """读取表格文件"""
@@ -666,7 +793,7 @@ class MyWindows(QWidget, Ui_Form):
 
         # 读取数据
         self.data = pd.read_csv(f'table/{self.table_aim}', encoding="GBK", sep='\t', header=0)
-
+        print(self.data.values)
         # 读取数据分类个数
         self.data_nums = 0
         for _data in self.data.values:
@@ -698,6 +825,7 @@ class MyWindows(QWidget, Ui_Form):
         # 将数据排序
         self.all_datas = sorted(self.all_datas, key=lambda x: x[0])
         print(self.all_datas)
+        self.get_table()
 
         # 将读取到的条目数据储存到TableWidget
         for entries in self.data.values[2:]:
@@ -841,7 +969,7 @@ class MyWindows(QWidget, Ui_Form):
                 self.submit_log_inf("请选择当前展示的表格所属条目", 0)
 
         except Exception as e:
-            self.submit_log_inf("请先选中表格条目", 0)
+            self.submit_log_inf(f"请先选中表格条目, {e}", 0)
 
     def submit_log_inf(self, info, env=1):
         """上传日志信息到窗口的textBrowser"""

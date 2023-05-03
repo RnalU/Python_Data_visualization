@@ -432,30 +432,54 @@
      <attribute name="title">
       <string>表格预览</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tableWidget_table">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>1431</width>
-        <height>741</height>
+        <height>691</height>
        </rect>
       </property>
-      <row>
-       <property name="text">
-        <string>test1</string>
-       </property>
-      </row>
-      <column>
-       <property name="text">
-        <string>test1</string>
-       </property>
-      </column>
-      <item row="0" column="0">
-       <property name="text">
-        <string>test</string>
-       </property>
-      </item>
+     </widget>
+     <widget class="QLabel" name="label_table_show_inf">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>708</y>
+        <width>201</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>当前表格:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_close_table">
+      <property name="geometry">
+       <rect>
+        <x>1140</x>
+        <y>702</y>
+        <width>110</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关闭表格</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_commit_table">
+      <property name="geometry">
+       <rect>
+        <x>1290</x>
+        <y>702</y>
+        <width>110</width>
+        <height>34</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>提交更改</string>
+      </property>
      </widget>
     </widget>
    </widget>
@@ -476,7 +500,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>24</y>
       <width>1431</width>
       <height>231</height>
      </rect>
