@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0198b50a-f7c7-41b1-9299-1f22424d479c" name="变更" comment="添加了一些新功能">
-      <change afterPath="$PROJECT_DIR$/build/程序测试/Preview.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/UI/desktop.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/UI/imageres 008.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/table/全国居民人均收入情况.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/table/国内生产总值.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/table/财政收支.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/table/货物进出口总额.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/visualPro.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/程序测试/运行请双击 'visualPro.exe' .txt" afterDir="false" />
+    <list default="true" id="0198b50a-f7c7-41b1-9299-1f22424d479c" name="变更" comment="完善了程序的一些功能&#10;修复了部分bug">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pythonProject6.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject6.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +26,7 @@
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -50,8 +43,10 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Yymmcc/PycharmProjects/pythonProject6/UI&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
   }
 }</component>
   <component name="RunManager" selected="Python.main">
@@ -214,6 +209,11 @@
       <workItem from="1682519185262" duration="4210000" />
       <workItem from="1682556113679" duration="25609000" />
       <workItem from="1682652383509" duration="3180000" />
+      <workItem from="1682680428572" duration="5364000" />
+      <workItem from="1682838981874" duration="2408000" />
+      <workItem from="1683033717718" duration="4048000" />
+      <workItem from="1683045526759" duration="24000" />
+      <workItem from="1683075649928" duration="6825000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1682578928023</created>
@@ -243,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682652951620</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="完善了程序的一些功能&#10;修复了部分bug">
+      <created>1683082005832</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1683082005832</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,7 +284,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="HEAD" />
                       </list>
                     </value>
                   </entry>
@@ -292,27 +299,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="更新" />
     <MESSAGE value="添加了一些新功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加了一些新功能" />
+    <MESSAGE value="完善了程序的一些功能&#10;修复了部分bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="完善了程序的一些功能&#10;修复了部分bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>322</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>412</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>459</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -324,6 +315,9 @@
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self.table_sub_datas" />
+        <watch expression="line_item" />
+        <watch expression="line_item_list" />
+        <watch expression="lines_str" />
       </configuration>
     </watches-manager>
   </component>
@@ -334,7 +328,7 @@
     <SUITE FILE_PATH="coverage/pythonProject6$table.coverage" NAME="table 覆盖结果" MODIFIED="1682523115614" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject6$data_test.coverage" NAME="data_test 覆盖结果" MODIFIED="1682598993606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject6$matlib.coverage" NAME="matlib 覆盖结果" MODIFIED="1682557353181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pythonProject6$main.coverage" NAME="main 覆盖结果" MODIFIED="1682653909770" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject6$main.coverage" NAME="main 覆盖结果" MODIFIED="1683081851813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python$main.coverage" NAME="main 覆盖结果" MODIFIED="1681813979967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
