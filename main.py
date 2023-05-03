@@ -18,7 +18,7 @@ from UI.form import Ui_Form
 class MatplotlibDraw(FigureCanvas):
     """绘图类"""
     # 声明回返信号
-    commite_log = pyqtSignal(str)
+    commit_log = pyqtSignal(str)
 
     def __init__(self, parent=None, width=20, height=10, dpi=125):
         super(MatplotlibDraw, self).__init__()
@@ -441,7 +441,7 @@ class MatplotlibDraw(FigureCanvas):
                     self.ax.pie(number_data, colors=colors, radius=1, center=(4, 4), labels=year_data,
                                 autopct='%.2f%%',
                                 labeldistance=1.1,
-                                wedgeprops={"line-width": 1, "edge color": "white"},
+                                wedgeprops={"linewidth": 1, "edgecolor": "white"},
                                 textprops={'fontsize': self.font_size * 3}, frame=True)
 
             x_major_locator = MultipleLocator(2)
@@ -547,17 +547,14 @@ class MatplotlibDraw(FigureCanvas):
 
         else:
             if type_pix == '矢量图':
-                self.commite_log.emit(
+                self.commit_log.emit(
                     f'生成成功！输出文件位于:\'./output/{time_log.replace(" ", "_").replace(":", "_")}-{self.table_name.replace(".csv", "")}.eps\'')
 
             elif type_pix == 'PNG':
-                self.commite_log.emit(
+                self.commit_log.emit(
                     f'生成成功！输出文件位于:\'./output/{time_log.replace(" ", "_").replace(":", "_")}-{self.table_name.replace(".csv", "")}.png\'')
 
-
 """子线程测试"""
-
-
 # class WindowsThread(QThread, Ui_Form):
 #     def __init__(self, objects):
 #         super(WindowsThread, self).__init__()
@@ -615,7 +612,7 @@ class MyWindows(QWidget, Ui_Form):
         # 创建绘图对象
         self.figure1 = MatplotlibDraw()
         # 绑定对象的信号
-        self.figure1.commite_log.connect(self.submit_log_inf)
+        self.figure1.commit_log.connect(self.submit_log_inf)
 
     def signal_init(self):
         """信号的相关绑定与声明"""
@@ -632,6 +629,8 @@ class MyWindows(QWidget, Ui_Form):
 
     def get_table(self):
         """获取选择的表格"""
+        # 先清除表格
+        self.tableWidget_table.clear()
         col = -1
         for line_list in self.data.values:
             line: str = line_list[0]
