@@ -11,7 +11,7 @@ CSV数据源自于国家统计局网站导出的格式。项目的数据也按�
 
 ## 如何部署
 
-项目环境基于 Anaconda Python3.9进行搭建，因此需要安装Anaconda，和一个支持conda语法的terminal 一般Windows的CMD即可满足。
+项目环境基于 Anaconda Python3.8进行搭建，因此需要安装Anaconda，和一个支持conda语法的terminal 一般Windows的CMD即可满足。
 
 验证是否Anaconda安装成功
 
@@ -23,7 +23,7 @@ conda -V        // 输出Anaconda当前版本
 环境搭建
 
 ```
-conda create -n "你的虚拟环境名称(py3.9)" python=3.9	
+conda create -n "你的虚拟环境名称(py3.8)" python=3.8
 ```
 
 进入克隆目录
@@ -47,7 +47,7 @@ cd ./Python_Data_visualization
 进入你的虚拟环境
 
 ```
-conda activate py3.9
+conda activate py3.8
 ```
 
 安装依赖
