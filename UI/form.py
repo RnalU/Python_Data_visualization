@@ -16,7 +16,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(1800, 1100)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("UI/imageres 008.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../../OneDrive/图片/Saved Pictures/win11 icons/imageres 187.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         self.groupBox_operate = QtWidgets.QGroupBox(Form)
         self.groupBox_operate.setGeometry(QtCore.QRect(10, 10, 311, 1081))
