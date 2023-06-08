@@ -238,7 +238,7 @@ class MyWindows(QWidget, Ui_Form):
         self.data_nums = 0
         for _data in self.data.values:
             if _data[0].split(",")[0] not in ["数据来源：国家统计局", "数据库：年度数据", "时间：最近10年", "指标"]:
-                if not _data[0].split(",")[0].find(".") > 0:
+                if len(_data[0].split(",")) > 1:
                     self.data_nums += 1
 
         # 根据数据个数，自动生成a * b区域划分数据
@@ -255,13 +255,14 @@ class MyWindows(QWidget, Ui_Form):
         # 其他数据处理
         for index, year in enumerate(years[1][0].replace("年", "").split(",")[1:]):
             self.all_datas.append([int(year)])
+            print(self.data_nums)
             for i in range(self.data_nums):
                 # years列表的结构为：行与行直接以列表储存，每一个列表中为字符串类型，表格使用，隔开。
                 if years[i + 2][0].split(",")[1 + index] == '':
                     self.all_datas[index].append(None)
                 else:
                     self.all_datas[index].append(float(years[i + 2][0].split(",")[1 + index]))
-
+                data = self.all_datas
         # 将数据排序
         self.all_datas = sorted(self.all_datas, key=lambda x: x[0])
         print(self.all_datas)

@@ -7,7 +7,6 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.ticker import MultipleLocator
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QSizePolicy
-from adjustText import adjust_text
 
 
 class MatplotlibDraw(FigureCanvas):
@@ -132,6 +131,9 @@ class MatplotlibDraw(FigureCanvas):
 
             # 排序好的数据顺序存入相应数组
             for _ in range(len(self.all_datas)):
+                if self.all_datas[_][i + 1] is None:
+                    # self.all_datas[_][i + 1] = 0
+                    continue
                 year_data.append(int(self.all_datas[_][0]))
                 number_data.append(self.all_datas[_][i + 1])
 
@@ -231,6 +233,8 @@ class MatplotlibDraw(FigureCanvas):
                 # 计算全体平均值
                 _sums = 0
                 for _ in number_data:
+                    if _ is None:
+                        _ = 0
                     _sums += _
                 _sums = _sums / len(number_data)
                 # 取出数据集中的最大值与最小值
@@ -277,6 +281,7 @@ class MatplotlibDraw(FigureCanvas):
                     # else:
                     #     ax.text(year_data[point], number_data[point], '%.0f' % number_data[point],
                     #             fontdict={'fontsize': font_size * 5}, ha='center', va='center')
+
 
             elif self.display_data:
                 # 为每个点绘制数据标签
@@ -341,6 +346,9 @@ class MatplotlibDraw(FigureCanvas):
 
             # 排序好的数据顺序存入相应数组
             for _ in range(len(self.all_datas)):
+                if self.all_datas[_][i + 1] is None:
+                    # self.all_datas[_][i + 1] = 0
+                    continue
                 year_data.append(int(self.all_datas[_][0]))
                 number_data.append(self.all_datas[_][i + 1])
 
@@ -396,13 +404,9 @@ class MatplotlibDraw(FigureCanvas):
                     self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1)
 
             if type_sub == 'cake':
-                # 对于一些数据可能为空，此处检查空部分的数据并将其置为零
-                if number_data.count(None):
-                    number_data[number_data.index(None)] = 0
-
                 # 饼图中不可出现复数数据，故将复数部分的数据删除
                 for idx, data in enumerate(number_data):
-                    if data <= 0:
+                    if data <= 0 or data is None:
                         number_data.pop(idx)
                         year_data.pop(idx)
 
@@ -452,6 +456,8 @@ class MatplotlibDraw(FigureCanvas):
                 # 计算全体平均值
                 _sums = 0
                 for _ in number_data:
+                    if _ is None:
+                        _ = 0
                     _sums += _
                 _sums = _sums / len(number_data)
                 # 取出数据集中的最大值与最小值
