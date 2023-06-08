@@ -192,3 +192,13 @@ class Ui_Form(object):
         self.pushButton_commit_table.setText(_translate("Form", "提交更改"))
         self.tabWidget_tables.setTabText(self.tabWidget_tables.indexOf(self.tab_table), _translate("Form", "表格预览"))
         self.groupBox.setTitle(_translate("Form", "日志"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())
