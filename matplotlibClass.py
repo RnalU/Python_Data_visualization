@@ -20,6 +20,7 @@ class MatplotlibDraw(FigureCanvas):
         plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
         # 预声明变量
+        self.draw_all = True   # 是否全部绘制
         self.table_rol = None  # 子图的行数
         self.table_col = None  # 子图的列数
         self.data_nums = None  # 表格条目数量
@@ -90,8 +91,6 @@ class MatplotlibDraw(FigureCanvas):
 
         # 创建画布
         self.fig = Figure(figsize=(width, height), dpi=dpi)
-        # 下面这个是画新图后不保留上次的图形，但这个代码似乎有问题报错了，先注释掉
-        # self.axes.hold(False)
 
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
@@ -100,10 +99,10 @@ class MatplotlibDraw(FigureCanvas):
         FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
-    def receive_values(self, rol, col, data_nums, datalist, fontsize, data, name, sub_change=False, sub_idx=None):
+    def receive_values(self, draw_all, rol, col, data_nums, datalist, fontsize, data, name, sub_change=False, sub_idx=None):
         """接收主窗口传递的绘图参数"""
-        print(rol, col, data_nums, datalist, fontsize)
         # 声明绘图参数
+        self.draw_all = draw_all
         self.table_rol = rol
         self.table_col = col
         self.data_nums = data_nums
@@ -114,13 +113,17 @@ class MatplotlibDraw(FigureCanvas):
         self.sub_change = sub_change
         self.sub_idx = sub_idx
 
-    def drawing(self, type_table: str, sub_type=None, sub_color=None, display_data=None, display_name=None):
+    def drawing(self, type_table: str):
         """绘制figure"""
         self.fig.clear()  # 清空画布
         self.fig.clf()
         self.draw_detail = []
 
-        new_texts = []
+        if self.draw_all == False:   # 如果单独绘制
+            self.data_nums = 1      # 只绘制一次
+            self.table_rol = 1      # 修改子图行列为1
+            self.table_col = 1
+
         for i in range(self.data_nums):
             # 列表初始化
             number_data = []
@@ -130,15 +133,23 @@ class MatplotlibDraw(FigureCanvas):
                 continue
 
             # 排序好的数据顺序存入相应数组
-            for _ in range(len(self.all_datas)):
-                if self.all_datas[_][i + 1] is None:
-                    # self.all_datas[_][i + 1] = 0
-                    continue
-                year_data.append(int(self.all_datas[_][0]))
-                number_data.append(self.all_datas[_][i + 1])
+            if self.draw_all:   # 如果全部绘制
+                for _ in range(len(self.all_datas)):
+                    if self.all_datas[_][i + 1] is None:
+                        # self.all_datas[_][i + 1] = 0
+                        continue
+                    year_data.append(int(self.all_datas[_][0]))
+                    number_data.append(self.all_datas[_][i + 1])
+
+            else:   # 如果单独绘制
+                for _ in range(len(self.all_datas)):
+                    if self.all_datas[_][self.sub_idx + 1] is None:
+                        # self.all_datas[_][i + 1] = 0
+                        continue
+                    year_data.append(int(self.all_datas[_][0]))
+                    number_data.append(self.all_datas[_][self.sub_idx + 1])
 
             # 绘制折线图
-            # plt.subplot(self.table_rol, self.table_col, (i + 1))
             self.ax = self.fig.add_subplot(self.table_rol, self.table_col, (i + 1))
             self.ax.cla()
 
@@ -180,7 +191,6 @@ class MatplotlibDraw(FigureCanvas):
                     if self.color_p == '__random':
                         self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1,
                                     color=self.color[randint(0, 155)])
-
                     else:
                         self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1, color=self.color_p)
 
@@ -188,13 +198,9 @@ class MatplotlibDraw(FigureCanvas):
                     self.ax.bar(year_data, number_data, width=1, edgecolor="white", linewidth=1)
 
             if type_table == 'cake':
-                # 对于一些数据可能为空，此处检查空部分的数据并将其置为零
-                if number_data.count(None):
-                    number_data[number_data.index(None)] = 0
-
                 # 饼图中不可出现复数数据，故将复数部分的数据删除
                 for idx, data in enumerate(number_data):
-                    if data <= 0:
+                    if data <= 0 or data is None:
                         number_data.pop(idx)
                         year_data.pop(idx)
 
@@ -274,15 +280,6 @@ class MatplotlibDraw(FigureCanvas):
                                 self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                              fontdict={'fontsize': self.font_size * 3.3}, ha='center', va='bottom')
 
-                    """废弃调整字符位置"""
-                    # if point != 0 and abs(number_data[point] - number_data[point - 1]) / abs(max(number_data[point], number_data[point - 1])) > 0.2:
-                    #     ax.text(year_data[point], number_data[point], '%.0f' %number_data[point],
-                    #             fontdict={'fontsize':font_size * 5}, va='center')
-                    # else:
-                    #     ax.text(year_data[point], number_data[point], '%.0f' % number_data[point],
-                    #             fontdict={'fontsize': font_size * 5}, ha='center', va='center')
-
-
             elif self.display_data:
                 # 为每个点绘制数据标签
                 for point in range(len(year_data)):
@@ -290,10 +287,6 @@ class MatplotlibDraw(FigureCanvas):
                         continue
                     self.ax.text(year_data[point], number_data[point], '%d' % number_data[point],
                                  fontdict={'fontsize': self.font_size * 3}, ha='center', va='bottom')
-
-            # new_texts.append([plt.text(x_, y_, str(text), fontsize=self.font_size * 3) for x_, y_, text in zip(year_data, number_data, number_data)])
-
-            # ax.set_xlabel('年份', fontsize=10)
 
             if not len(self.data.values[i + 2][0].split(",")[0]) > 12 and type_table != 'cake':
                 self.ax.set_ylabel(self.data.values[i + 2][0].split(",")[0], fontsize=10)

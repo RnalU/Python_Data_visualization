@@ -16,11 +16,10 @@ class MyWindows(QWidget, Ui_Form):
         # UI初始化
         self.setupUi(self)
         self.signal_init()
-        # self.textBrowser.append(f"{'温馨提示':-^28}\n系统会自动在程序目录下创建table文件夹\n请将展示的表格放入table文件夹内")
-        # self.textBrowser.moveCursor(-1)
 
         # 变量初始化
         self.table_draw_on = False  # 表格是否绘制
+        self.table_draw_all = False    # 全部绘制
         self.table_aim = None  # 当前表格名称
         self.table_drawing = None  # 绘制完成的表格名称
         self.table_nums = None  # 声明表的个数
@@ -262,7 +261,7 @@ class MyWindows(QWidget, Ui_Form):
                     self.all_datas[index].append(None)
                 else:
                     self.all_datas[index].append(float(years[i + 2][0].split(",")[1 + index]))
-                data = self.all_datas
+
         # 将数据排序
         self.all_datas = sorted(self.all_datas, key=lambda x: x[0])
         print(self.all_datas)
@@ -279,6 +278,9 @@ class MyWindows(QWidget, Ui_Form):
 
     def draw_tables(self, sub_change=False, sub_idx=None):
         """绘制图标"""
+        """
+            当sub_change == True 时 不绘制图像， 只传递需要修改的条目对应的索引(sub_idx)从0开始
+        """
         if len(self.all_datas) != 0 and self.font_size and self.num_cols and self.num_rows:
             """调用绘图对象, 绘制图像"""
             try:
@@ -288,6 +290,11 @@ class MyWindows(QWidget, Ui_Form):
                 pass
 
             # 检测相关参数
+            if self.radioButton_draw_part.isChecked():  # 检测单独绘制与全部绘制
+                self.table_draw_all = False
+            else:
+                self.table_draw_all = True
+
             if self.checkBox_show_data_v.isChecked():
                 self.figure1.display_data = True  # 显示数据
             else:
@@ -297,7 +304,7 @@ class MyWindows(QWidget, Ui_Form):
             else:
                 self.figure1.display_table_name = False  # 关闭显示表名
 
-            if self.comboBox_select_color.currentText() in self.aim_colors:
+            if self.comboBox_select_color.currentText() in self.aim_colors:     # 获取颜色
                 self.figure1.color_p = self.colors_dict[self.comboBox_select_color.currentText()]
             else:
                 self.figure1.color_p = False
@@ -305,19 +312,48 @@ class MyWindows(QWidget, Ui_Form):
             # 加入垂直布局
             self.vlayout_show_plot.addWidget(self.figure1)
 
-            self.figure1.receive_values(
-                rol=self.num_rows,
-                col=self.num_cols,
-                data_nums=self.data_nums,
-                datalist=self.all_datas,
-                fontsize=self.font_size,
-                data=self.data,
-                name=self.table_aim,
-                sub_change=sub_change,
-                sub_idx=sub_idx)
+            # 单独绘制图表判定
+            if self.table_draw_all == False:
+                # 得到选择条目
+                try:
+                    aim_entry = self.listWidget_entries.selectedItems()[0].text()  # 尝试得到选择的条目
+                    aim_entry_idx = self.table_sub_datas.index(aim_entry)
+
+                except IndexError:
+                    self.submit_log_inf("请选择一个条目", 0)
+                    return -1
+
+                except Exception as e:
+                    self.submit_log_inf(f"发生错误，系统返回{e}", 0)
+                    return -1
+
+            if self.table_draw_all == False:
+                self.figure1.receive_values(
+                    draw_all=self.table_draw_all,
+                    rol=self.num_rows,
+                    col=self.num_cols,
+                    data_nums=self.data_nums,
+                    datalist=self.all_datas,
+                    fontsize=self.font_size,
+                    data=self.data,
+                    name=self.table_aim,
+                    sub_change=sub_change,
+                    sub_idx=aim_entry_idx)
+            else:
+                self.figure1.receive_values(
+                    draw_all=self.table_draw_all,
+                    rol=self.num_rows,
+                    col=self.num_cols,
+                    data_nums=self.data_nums,
+                    datalist=self.all_datas,
+                    fontsize=self.font_size,
+                    data=self.data,
+                    name=self.table_aim,
+                    sub_change=sub_change,
+                    sub_idx=sub_idx)
 
             try:
-                if not sub_change:  # 如果确定为子图自定义绘制, 则先取消绘制, 只传递信息
+                if sub_change == False:  # 如果确定不是子图自定义绘制, 则直接绘制
                     if self.radioButton_type_of_line.isChecked():
                         self.figure1.drawing('line')
 
@@ -362,55 +398,61 @@ class MyWindows(QWidget, Ui_Form):
 
     def subplot_change(self):
         """子图自定义修改"""
-        try:
-            aim_entry = self.listWidget_entries.selectedItems()[0].text()  # 尝试得到选择的条目
-            self.submit_log_inf(f"你选中的条目是'{aim_entry}'")
+        if self.table_draw_on:
+            if self.table_draw_all:
+                try:
+                    aim_entry = self.listWidget_entries.selectedItems()[0].text()  # 尝试得到选择的条目
+                    self.submit_log_inf(f"你选中的条目是'{aim_entry}'")
 
-            if self.table_drawing == self.table_aim:  # 检测当前选择的条目对应表格与绘制的表格是否一致
-                subplot_type = None
-                subplot_display_data = False
-                subplot_display_name = False
+                    if self.table_drawing == self.table_aim:  # 检测当前选择的条目对应表格与绘制的表格是否一致
+                        subplot_type = None
+                        subplot_display_data = False
+                        subplot_display_name = False
 
-                self.submit_log_inf('开始绘制')
-                # 先得到条目对应的索引
-                aim_entry_idx = self.table_sub_datas.index(aim_entry)
-                # 得到要绘制的子图的相关参数
-                if self.radioButton_type_of_line.isChecked():
-                    subplot_type = 'line'
+                        self.submit_log_inf('开始绘制')
+                        # 先得到条目对应的索引
+                        aim_entry_idx = self.table_sub_datas.index(aim_entry)
+                        # 得到要绘制的子图的相关参数
+                        if self.radioButton_type_of_line.isChecked():
+                            subplot_type = 'line'
 
-                if self.radioButton_type_of_pot.isChecked():
-                    subplot_type = 'pot'
+                        if self.radioButton_type_of_pot.isChecked():
+                            subplot_type = 'pot'
 
-                if self.radioButton_bar.isChecked():
-                    subplot_type = 'bar'
+                        if self.radioButton_bar.isChecked():
+                            subplot_type = 'bar'
 
-                if self.radioButton_cake.isChecked():
-                    subplot_type = 'cake'
+                        if self.radioButton_cake.isChecked():
+                            subplot_type = 'cake'
 
-                subplot_color = self.comboBox_select_color.currentText()
+                        subplot_color = self.comboBox_select_color.currentText()
 
-                if self.checkBox_show_data_v.isChecked():
-                    subplot_display_data = True
+                        if self.checkBox_show_data_v.isChecked():
+                            subplot_display_data = True
 
-                if self.checkBox_show_table_name.isChecked():
-                    subplot_display_name = True
+                        if self.checkBox_show_table_name.isChecked():
+                            subplot_display_name = True
 
-                # 绘制
-                self.draw_tables(True, aim_entry_idx)  # 此处只起到传递信息的作用
+                        # 绘制
+                        self.draw_tables(True, aim_entry_idx)  # 此处只起到传递信息的作用
 
-                if subplot_color in self.aim_colors:
-                    self.figure1.subplot_drawing(subplot_type, self.colors_dict[subplot_color], subplot_display_data,
-                                                 subplot_display_name)  # 传递绘制的子图的信息
+                        if subplot_color in self.aim_colors:
+                            self.figure1.subplot_drawing(subplot_type, self.colors_dict[subplot_color], subplot_display_data,
+                                                         subplot_display_name)  # 传递绘制的子图的信息
 
-                else:
-                    self.figure1.subplot_drawing(subplot_type, False, subplot_display_data,
-                                                 subplot_display_name)  # 传递绘制的子图的信息
+                        else:
+                            self.figure1.subplot_drawing(subplot_type, False, subplot_display_data,
+                                                         subplot_display_name)  # 传递绘制的子图的信息
 
+                    else:
+                        self.submit_log_inf("请选择当前展示的表格所属条目", 0)
+
+                except Exception as e:
+                    self.submit_log_inf(f"请先选中表格条目, {e}", 0)
             else:
-                self.submit_log_inf("请选择当前展示的表格所属条目", 0)
-
-        except Exception as e:
-            self.submit_log_inf(f"请先选中表格条目, {e}", 0)
+                self.submit_log_inf("请选择全部绘制", 0)
+        else:
+            self.submit_log_inf("请先绘制表格", 0)
 
     def submit_log_inf(self, info, env=1):
         """上传日志信息到窗口的textBrowser"""
