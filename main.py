@@ -196,7 +196,6 @@ class MyWindows(QWidget, Ui_Form):
             file_list = [file for file in os.listdir('./table') if file.split('.')[-1] == 'csv']
             file_nums = len(file_list)
             self.table_nums = file_nums
-
             if file_nums == older_nums:
                 self.submit_log_inf(f"刷新成功, 未找到新的CSV表格文件")
 
@@ -232,7 +231,6 @@ class MyWindows(QWidget, Ui_Form):
 
         # 读取数据
         self.data = pd.read_csv(f'table/{self.table_aim}', encoding="GBK", sep='\t', header=0)
-        print(self.data.values)
         # 读取数据分类个数
         self.data_nums = 0
         for _data in self.data.values:
@@ -254,7 +252,6 @@ class MyWindows(QWidget, Ui_Form):
         # 其他数据处理
         for index, year in enumerate(years[1][0].replace("年", "").split(",")[1:]):
             self.all_datas.append([int(year)])
-            print(self.data_nums)
             for i in range(self.data_nums):
                 # years列表的结构为：行与行直接以列表储存，每一个列表中为字符串类型，表格使用，隔开。
                 if years[i + 2][0].split(",")[1 + index] == '':
@@ -290,10 +287,14 @@ class MyWindows(QWidget, Ui_Form):
                 pass
 
             # 检测相关参数
-            if self.radioButton_draw_part.isChecked():  # 检测单独绘制与全部绘制
-                self.table_draw_all = False
+            if self.radioButton_draw_all.isChecked() or self.radioButton_draw_part.isChecked(): # 确定已选择一种绘图方式
+                if self.radioButton_draw_part.isChecked():  # 检测单独绘制与全部绘制
+                    self.table_draw_all = False
+                else:
+                    self.table_draw_all = True
             else:
-                self.table_draw_all = True
+                self.submit_log_inf("请选择一种绘制方式!", 0)
+                return -1
 
             if self.checkBox_show_data_v.isChecked():
                 self.figure1.display_data = True  # 显示数据
@@ -327,7 +328,7 @@ class MyWindows(QWidget, Ui_Form):
                     self.submit_log_inf(f"发生错误，系统返回{e}", 0)
                     return -1
 
-            if self.table_draw_all == False:
+            if self.table_draw_all == False:    # 绘制选中条目
                 self.figure1.receive_values(
                     draw_all=self.table_draw_all,
                     rol=self.num_rows,
@@ -339,7 +340,7 @@ class MyWindows(QWidget, Ui_Form):
                     name=self.table_aim,
                     sub_change=sub_change,
                     sub_idx=aim_entry_idx)
-            else:
+            else:                               # 绘制全部
                 self.figure1.receive_values(
                     draw_all=self.table_draw_all,
                     rol=self.num_rows,
